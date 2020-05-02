@@ -1,11 +1,11 @@
-const app = require("express")(),
+const express = require("express"),
   bodyParser = require("body-parser"),
   mongoose = require("mongoose"),
   Campground = require("./models/campground"),
   Comment = require("./models/comment"),
-  seedDB = require("./seeds");
+  seedDB = require("./seeds"),
+  app = express();
 
-seedDB();
 mongoose.connect("mongodb://localhost/yelp_camp", {
   useUnifiedTopology: true,
   useNewUrlParser: true,
@@ -15,6 +15,8 @@ mongoose.connect("mongodb://localhost/yelp_camp", {
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
+app.use(express.static(__dirname + "/public"));
+seedDB();
 
 //Landing page
 app.get("/", (req, res) => {
