@@ -3,13 +3,6 @@ const router = express.Router();
 const passport = require("passport");
 const User = require("../models/user");
 
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-}
-
 //Landing page
 router.get("/", (req, res) => {
   res.render("landing");
@@ -17,18 +10,22 @@ router.get("/", (req, res) => {
 
 //GET REGISTER FORM
 router.get("/register", (req, res) => {
-  res.render("register");
+  res.render("register", { page: "register" });
 });
 
 //SIGNUP POST ROUTE
 router.post("/register", (req, res) => {
   const newUser = new User({ username: req.body.username });
+  if (req.body.adminCode === "admin123") {
+    newUser.isAdmin = true;
+  }
   User.register(newUser, req.body.password, (err, user) => {
     if (err) {
-      console.log(err);
-      return res.render("register");
+      req.flash("error", err.message);
+      return res.redirect("register");
     }
     passport.authenticate("local")(req, res, () => {
+      req.flash("success", `Welcome to YelpCamp ${user.username}`);
       res.redirect("/campgrounds");
     });
   });
@@ -36,7 +33,7 @@ router.post("/register", (req, res) => {
 
 //GET LOGIN FORM
 router.get("/login", (req, res) => {
-  res.render("login");
+  res.render("login", { page: "login" });
 });
 
 //LOG IN POST ROUTE
@@ -52,6 +49,7 @@ router.post(
 //LOG OUT ROUTE
 router.get("/logout", (req, res) => {
   req.logout();
+  req.flash("success", "Logged out!");
   res.redirect("/campgrounds");
 });
 

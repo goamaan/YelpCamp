@@ -1,9 +1,11 @@
+require("dotenv").config();
 const express = require("express"),
   bodyParser = require("body-parser"),
   mongoose = require("mongoose"),
   passport = require("passport"),
   LocalStrategy = require("passport-local"),
   methodOverride = require("method-override"),
+  flash = require("connect-flash"),
   Campground = require("./models/campground"),
   Comment = require("./models/comment"),
   User = require("./models/user"),
@@ -29,14 +31,18 @@ app.use(
   })
 );
 
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.locals.moment = require("moment");
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
   next();
 });
 

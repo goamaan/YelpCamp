@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const Campground = require("../models/campground");
 const Comment = require("../models/comment");
+const middleware = require("../middleware");
 
 //NEW COMMENT FORM
-router.get("/new", isLoggedIn, (req, res) => {
+router.get("/new", middleware.isLoggedIn, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
-    if (err) {
-      console.log(err);
+    if (err || !campground) {
+      req.flash("error", "Campground not found!");
+      res.redirect("back");
     } else {
       res.render("comments/new", { campground: campground });
     }
@@ -15,7 +17,7 @@ router.get("/new", isLoggedIn, (req, res) => {
 });
 
 //COMMENT POST ROUTE
-router.post("/", isLoggedIn, (req, res) => {
+router.post("/", middleware.isLoggedIn, (req, res) => {
   Campground.findById(req.params.id, (err, campground) => {
     if (err) {
       console.log(err);
@@ -23,6 +25,7 @@ router.post("/", isLoggedIn, (req, res) => {
     } else {
       Comment.create(req.body.comment, (err, comment) => {
         if (err) {
+          req.flash("error", "Oops, something went wrong!");
           console.log(err);
         } else {
           //add user and id to comment
@@ -31,6 +34,7 @@ router.post("/", isLoggedIn, (req, res) => {
           comment.save();
           campground.comments.push(comment);
           campground.save();
+          req.flash("success", "Successfully added comment!");
           res.redirect(`/campgrounds/${campground._id}`);
         }
       });
@@ -39,21 +43,31 @@ router.post("/", isLoggedIn, (req, res) => {
 });
 
 //EDIT COMMENT ROUTE
-router.get("/:comment_id/edit", checkCommentOwnership, (req, res) => {
-  Comment.findById(req.params.comment_id, (err, foundComment) => {
-    if (err) {
-      res.redirect("back");
-    } else {
-      res.render("comments/edit", {
-        campground_id: req.params.id,
-        comment: foundComment,
+router.get(
+  "/:comment_id/edit",
+  middleware.checkCommentOwnership,
+  (req, res) => {
+    Campground.findById(req.params.id, (err, foundCampground) => {
+      if (err || !foundCampground) {
+        req.flash("error", "Campground not found!");
+        return res.redirect("back");
+      }
+      Comment.findById(req.params.comment_id, (err, foundComment) => {
+        if (err) {
+          res.redirect("back");
+        } else {
+          res.render("comments/edit", {
+            campground_id: req.params.id,
+            comment: foundComment,
+          });
+        }
       });
-    }
-  });
-});
+    });
+  }
+);
 
 //UPDATE COMMENT ROUTE
-router.put("/:comment_id", checkCommentOwnership, (req, res) => {
+router.put("/:comment_id", middleware.checkCommentOwnership, (req, res) => {
   Comment.findByIdAndUpdate(
     req.params.comment_id,
     req.body.comment,
@@ -68,40 +82,15 @@ router.put("/:comment_id", checkCommentOwnership, (req, res) => {
 });
 
 //DELETE COMMENT ROUTE
-router.delete("/:comment_id", checkCommentOwnership, (req, res) => {
+router.delete("/:comment_id", middleware.checkCommentOwnership, (req, res) => {
   Comment.findByIdAndRemove(req.params.comment_id, (err) => {
     if (err) {
       res.redirect("back");
     } else {
+      req.flash("success", "Comment deleted!");
       res.redirect(`/campgrounds/${req.params.id}`);
     }
   });
 });
-
-function checkCommentOwnership(req, res, next) {
-  if (req.isAuthenticated()) {
-    Campground.findById(req.params.comment_id, (err, foundComment) => {
-      if (err) {
-        res.redirect("back");
-      } else {
-        //is the user authorized
-        if (foundComment.author.id.equals(req.user._id)) {
-          next();
-        } else {
-          res.redirect("back");
-        }
-      }
-    });
-  } else {
-    res.redirect("back");
-  }
-}
-
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-}
 
 module.exports = router;

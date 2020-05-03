@@ -1,80 +1,111 @@
 <%- include("../partials/header") %>
-<div class="container">
-  <div class="row">
-    <div class="col-md-3">
-      <p class="lead">Yelp Camp</p>
-      <div class="list-group">
-        <li class="list-group-item active">Info 1</li>
-        <li class="list-group-item">Info 1</li>
-        <li class="list-group-item">Info 1</li>
+<div class="row">
+  <div class="col-md-3">
+    <p class="lead">Yelp Camp</p>
+    <div class="list-group">
+      <li class="list-group-item active">Info 1</li>
+      <li class="list-group-item">Info 1</li>
+      <li class="list-group-item">Info 1</li>
+    </div>
+    <div id="map"></div>
+  </div>
+  <div class="col-md-9">
+    <div class="thumbnail">
+      <img class="img-responsive" src="<%= campground.image %> " alt="" />
+      <div class="caption">
+        <h4 class="pull-right">$<%= campground.cost %>/night</h4>
+        <h4><a href=""><%= campground.name %></a></h4>
+        <p><%= campground.description %></p>
+        <!-- prettier-ignore -->
+        <p><em>Submitted by: <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em></p>
+        <!-- prettier-ignore -->
+        <% if(currentUser && campground.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
+        <a
+          class="btn btn-warning"
+          href="/campgrounds/<%= campground._id %>/edit "
+          >Edit</a
+        >
+        <form
+          action="/campgrounds/<%= campground._id %>?_method=DELETE"
+          method="POST"
+          class="deleteForm"
+        >
+          <button class="btn btn-danger">Delete</button>
+        </form>
+        <% } %>
       </div>
     </div>
-    <div class="col-md-9">
-      <div class="thumbnail">
-        <img class="img-responsive" src="<%= campground.image %> " alt="" />
-        <div class="caption">
-          <h4 class="pull-right">$9.00/night</h4>
-          <h4><a href=""><%= campground.name %></a></h4>
-          <p><%= campground.description %></p>
-          <p><em>Submitted by <%= campground.author.username %></em></p>
+    <div class="well">
+      <div class="text-right">
+        <a
+          class="btn btn-success"
+          href="/campgrounds/<%= campground._id %>/comments/new "
+          >Add new comment</a
+        >
+      </div>
+      <hr />
+      <% campground.comments.forEach((comment) => { %>
+      <div class="row">
+        <div class="col-md-12">
+          <strong><%= comment.author.username %></strong>
+          <span class="pull-right">
+            <%= moment(comment.createdAt).fromNow() %>
+          </span>
+          <p><%= comment.text %></p>
           <!-- prettier-ignore -->
-          <% if(currentUser && (campground.author.id.equals(currentUser._id))) { %>
+          <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
           <a
-            class="btn btn-warning"
-            href="/campgrounds/<%= campground._id %>/edit "
-            >Edit</a
-          >
+            class="btn btn-xs btn-warning"
+            href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit"
+            >Edit
+          </a>
           <form
-            action="/campgrounds/<%= campground._id %>?_method=DELETE"
+            action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE"
             method="POST"
             class="deleteForm"
           >
-            <button class="btn btn-danger">Delete</button>
+            <input type="submit" class="btn btn-xs btn-danger" value="Delete" />
           </form>
           <% } %>
         </div>
       </div>
-      <div class="well">
-        <div class="text-right">
-          <a
-            class="btn btn-success"
-            href="/campgrounds/<%= campground._id %>/comments/new "
-            >Add new comment</a
-          >
-        </div>
-        <hr />
-        <% campground.comments.forEach((comment) => { %>
-        <div class="row">
-          <div class="col-md-12">
-            <strong><%= comment.author.username %></strong>
-            <span class="pull-right">10 days ago</span>
-            <p><%= comment.text %></p>
-            <!-- prettier-ignore -->
-            <% if(currentUser && (comment.author.id.equals(currentUser._id))) { %>
-            <a
-              class="btn btn-xs btn-warning"
-              href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit"
-              >Edit
-            </a>
-            <form
-              action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE"
-              method="POST"
-              class="deleteForm"
-            >
-              <input
-                type="submit"
-                class="btn btn-xs btn-danger"
-                value="Delete"
-              />
-            </form>
-            <% } %>
-          </div>
-        </div>
-        <% }) %>
-      </div>
+      <% }) %>
     </div>
   </div>
 </div>
+
+<script>
+  function initMap() {
+    const lat = Number(`<%= campground.lat %>`);
+    const lng = Number(`<%= campground.lng %>`);
+    const center = { lat: lat, lng: lng };
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 8,
+      center: center,
+      scrollwheel: false,
+    });
+    const contentString = `
+      <strong><%= campground.name %><br />
+      <%= campground.location %></strong>
+      <p><%= campground.description %></p>
+    `;
+    const infowindow = new google.maps.InfoWindow({
+      content: contentString,
+    });
+    const marker = new google.maps.Marker({
+      position: center,
+      map: map,
+    });
+    marker.addListener("click", function () {
+      infowindow.open(map, marker);
+    });
+  }
+</script>
+<script
+  async
+  defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCT0DHgfiaL9bf-EqpjDS0WXA3we8WGRJw&callback=initMap"
+></script>
 
 <!-- prettier-ignore -->
 <%- include("../partials/footer") %>
