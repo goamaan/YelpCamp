@@ -1,75 +1,88 @@
 <%- include("../partials/header") %>
 <div class="row">
   <div class="col-md-3">
-    <p class="lead">Yelp Camp</p>
-    <div class="list-group">
-      <li class="list-group-item active">Info 1</li>
-      <li class="list-group-item">Info 1</li>
-      <li class="list-group-item">Info 1</li>
-    </div>
     <div id="map"></div>
   </div>
   <div class="col-md-9">
-    <div class="thumbnail">
-      <img class="img-responsive" src="<%= campground.image %> " alt="" />
-      <div class="caption">
-        <h4 class="pull-right">$<%= campground.cost %>/night</h4>
-        <h4><a href=""><%= campground.name %></a></h4>
-        <p><%= campground.description %></p>
-        <!-- prettier-ignore -->
-        <p><em>Submitted by: <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em></p>
+    <div class="card mb-3">
+      <img
+        class="card-img-top"
+        src="<%= campground.image %>"
+        alt="<%= campground.name %>"
+      />
+      <div class="card-body">
+        <p class="float-right">
+          $<%= campground.cost %>/night
+        </p>
+        <h5 class="card-title"><%= campground.name %></h5>
+        <p>
+          <!-- prettier-ignore -->
+          <em>Submitted by: <%= campground.author.username %>, <%=moment(campground.createdAt).fromNow() %></em>
+        </p>
+        <hr />
+        <p class="card-text"><%= campground.description %></p>
         <!-- prettier-ignore -->
         <% if(currentUser && campground.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
         <a
           class="btn btn-warning"
-          href="/campgrounds/<%= campground._id %>/edit "
+          href="/campgrounds/<%= campground._id %>/edit"
           >Edit</a
         >
         <form
           action="/campgrounds/<%= campground._id %>?_method=DELETE"
           method="POST"
-          class="deleteForm"
+          class="delete-form"
         >
           <button class="btn btn-danger">Delete</button>
         </form>
         <% } %>
       </div>
     </div>
-    <div class="well">
-      <div class="text-right">
-        <a
-          class="btn btn-success"
-          href="/campgrounds/<%= campground._id %>/comments/new "
-          >Add new comment</a
-        >
-      </div>
-      <hr />
-      <% campground.comments.forEach((comment) => { %>
-      <div class="row">
-        <div class="col-md-12">
-          <strong><%= comment.author.username %></strong>
-          <span class="pull-right">
-            <%= moment(comment.createdAt).fromNow() %>
-          </span>
-          <p><%= comment.text %></p>
-          <!-- prettier-ignore -->
-          <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
+    <div class="card">
+      <div class="card-body">
+        <div class="text-right">
           <a
-            class="btn btn-xs btn-warning"
-            href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit"
-            >Edit
-          </a>
-          <form
-            action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE"
-            method="POST"
-            class="deleteForm"
+            class="btn btn-success"
+            href="/campgrounds/<%= campground._id %>/comments/new"
+            >Add New Comment</a
           >
-            <input type="submit" class="btn btn-xs btn-danger" value="Delete" />
-          </form>
-          <% } %>
+        </div>
+        <hr />
+        <div class="row">
+          <% campground.comments.forEach(function(comment){ %>
+          <div class="col-md-12 mb-2">
+            <div class="card">
+              <div class="card-body">
+                <div class="float-left">
+                  <p class="card-title"><%= comment.author.username %></p>
+                  <p class="card-text"><%= comment.text %></p>
+                </div>
+                <div class="float-right">
+                  <p><%= moment(comment.createdAt).fromNow() %></p>
+                  <!-- prettier-ignore -->
+                  <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
+                  <div class="float-right">
+                    <a
+                      href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit"
+                      class="btn btn-sm btn-warning"
+                      >EDIT</a
+                    >
+                    <form
+                      class="delete-form"
+                      action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE"
+                      method="POST"
+                    >
+                      <button class="btn btn-sm btn-danger">DELETE</button>
+                    </form>
+                  </div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% }) %>
         </div>
       </div>
-      <% }) %>
     </div>
   </div>
 </div>

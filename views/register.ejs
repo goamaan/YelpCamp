@@ -1,56 +1,55 @@
 <%- include("partials/header") %>
 
 <div class="row">
-  <h1 style="text-align: center;">Sign Up</h1>
-  <div style="width: 30%; margin: 25px auto;">
-    <form action="/register" method="post">
-      <div class="form-group">
-        <input
-          class="form-control"
-          type="text"
-          name="username"
-          placeholder="Username"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <input
-          class="form-control"
-          type="password"
-          name="password"
-          id="password"
-          placeholder="Password"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <input
-          class="form-control"
-          type="password"
-          id="confirm"
-          placeholder="Confirm Password"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <input
-          class="form-control"
-          type="text"
-          name="adminCode"
-          placeholder="Admin code"
-        />
-      </div>
-      <div class="form-group">
-        <button class="btn btn-lg btn-primary btn-block">
-          Sign Up!
-        </button>
-      </div>
+  <div class="col-md-12">
+    <form class="form-signin" action="/register" method="POST">
+      <h1 class="h3 mb-3 font-weight-normal">Sign up!</h1>
+      <label for="inputUsername" class="sr-only">Username</label>
+      <input
+        type="text"
+        id="inputUsername"
+        class="form-control"
+        name="username"
+        placeholder="Username"
+        required
+        autofocus
+      />
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input
+        type="password"
+        id="inputPassword"
+        class="form-control"
+        name="password"
+        placeholder="Password"
+        required
+      />
+      <label for="confirmPassword" class="sr-only">Confirm Password</label>
+      <input
+        class="form-control"
+        type="password"
+        id="confirm"
+        placeholder="Confirm Password"
+        required
+      />
+      <label for="adminCode" class="sr-only">Admin Code</label>
+      <input
+        class="form-control"
+        type="text"
+        name="adminCode"
+        placeholder="Admin code (Optional) "
+      />
+      <button class="btn btn-lg btn-primary btn-block" type="submit">
+        Sign up
+      </button>
     </form>
-    <a href="/campgrounds">Go Back</a>
+    <div class="form-signin">
+      <a href="/campgrounds">Go Back</a>
+    </div>
   </div>
 </div>
+
 <script>
-  let password = document.getElementById("password");
+  let password = document.getElementById("inputPassword");
   let confirmPassword = document.getElementById("confirm");
   function validate() {
     if (password.value != confirmPassword.value) {

@@ -16,16 +16,36 @@ const geocoder = NodeGeocoder(options);
 
 //INDEX
 router.get("/", (req, res) => {
-  Campground.find({}, (err, campgrounds) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render("campgrounds/index", {
-        campgrounds: campgrounds,
-        page: "campgrounds",
-      });
-    }
-  });
+  var noMatch = null;
+  if (req.query.search) {
+    const regex = new RegExp(escapeRegex(req.query.search), "gi");
+    // Get all campgrounds from DB
+    Campground.find({ name: regex }, function (err, allCampgrounds) {
+      if (err) {
+        console.log(err);
+      } else {
+        if (allCampgrounds.length < 1) {
+          noMatch = "No campgrounds match that query, please try again.";
+        }
+        res.render("campgrounds/index", {
+          campgrounds: allCampgrounds,
+          noMatch: noMatch,
+        });
+      }
+    });
+  } else {
+    Campground.find({}, (err, campgrounds) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.render("campgrounds/index", {
+          campgrounds: campgrounds,
+          page: "campgrounds",
+          noMatch: noMatch,
+        });
+      }
+    });
+  }
 });
 
 router.post("/", middleware.isLoggedIn, (req, res) => {
@@ -39,7 +59,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
     var location = data[0].formattedAddress;
     const newCampground = {
       name: req.body.name,
-      price: req.body.price,
+      cost: req.body.cost,
       image: req.body.image,
       description: req.body.description,
       author: {
@@ -130,5 +150,9 @@ router.delete("/:id", middleware.checkCampgroundOwnership, (req, res) => {
     });
   });
 });
+
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
 
 module.exports = router;

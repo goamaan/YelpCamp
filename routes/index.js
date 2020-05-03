@@ -37,14 +37,14 @@ router.get("/login", (req, res) => {
 });
 
 //LOG IN POST ROUTE
-router.post(
-  "/login",
+router.post("/login", function (req, res, next) {
   passport.authenticate("local", {
     successRedirect: "/campgrounds",
     failureRedirect: "/login",
-  }),
-  (req, res) => {}
-);
+    failureFlash: true,
+    successFlash: "Welcome to YelpCamp, " + req.body.username + "!",
+  })(req, res);
+});
 
 //LOG OUT ROUTE
 router.get("/logout", (req, res) => {
