@@ -10,7 +10,7 @@
         <input
           class="form-control"
           type="text"
-          placeholder="name"
+          placeholder="Name"
           name="name"
         />
       </div>
@@ -18,7 +18,7 @@
         <input
           class="form-control"
           type="number"
-          placeholder="cost"
+          placeholder="Cost"
           name="cost"
           min="0.01"
           step="0.01"
@@ -28,14 +28,15 @@
         <input
           class="form-control"
           type="text"
-          placeholder="image url"
+          placeholder="Image url (ending with .jpg,.jpeg,.png, or .gif)"
           name="image"
+          id="imageURL"
         />
       </div>
       <div class="form-group">
         <textarea
           class="form-control"
-          placeholder="description"
+          placeholder="Description"
           name="description"
           form="campground"
           cols="30"
@@ -53,12 +54,25 @@
         />
       </div>
       <div class="form-group">
-        <button class="btn btn-lg btn-primary btn-block">Submit</button>
+        <button class="btn btn-lg btn-outline-primary btn-block">Submit</button>
       </div>
     </form>
     <a href="/campgrounds">Go Back</a>
   </div>
 </div>
+
+<script>
+  let image = document.getElementById("imageURL");
+  function validate() {
+    if (image.value.match(/\.(jpeg|jpg|gif|png)$/) == null) {
+      // console.log(password.value, confirmPassword.value);
+      image.setCustomValidity("URL needs to end with .jpeg,.jpg,.png or .gif");
+    } else {
+      image.setCustomValidity("");
+    }
+  }
+  image.onchange = validate;
+</script>
 
 <!-- prettier-ignore -->
 <%- include("../partials/footer") %>

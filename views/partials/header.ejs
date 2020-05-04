@@ -3,13 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/lux/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-oOs/gFavzADqv3i5nCM+9CzXe3e5vXLXZ5LZ7PplpsWpTCufB7kqkTlC9FtZ5nJo"
-      crossorigin="anonymous"
-    />
+    <title>YelpCamp</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/materia/bootstrap.min.css" rel="stylesheet" integrity="sha384-1tymk6x9Y5K+OF0tlmG2fDRcn67QGzBkiM3IgtJ3VrtGrIi5ryhHjKjeeS60f1FA" crossorigin="anonymous">
     <link
       href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;400;700&display=swap"
       rel="stylesheet"
@@ -18,7 +13,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-custom mb-4">
-      <a class="navbar-brand" href="/">YelpCamp</a>
+      <a class="navbar-brand" href="/">YelpCamp <i class="fas fa-map-signs"></i></a>
       <button
         class="navbar-toggler"
         type="button"
@@ -43,12 +38,12 @@
           <li
             class="nav-item <%= typeof page !== 'undefined' && page === 'login' ? 'active' : '' %>"
           >
-            <a href="/login" class="nav-link">Login</a>
+            <a href="/login" class="nav-link">Login <i class="fas fa-sign-in-alt"></i></a>
           </li>
           <li
             class="nav-item <%= typeof page !== 'undefined' && page === 'register' ? 'active' : '' %>"
           >
-            <a href="/register" class="nav-link">Sign Up</a>
+            <a href="/register" class="nav-link">Sign Up <i class="fas fa-user-plus"></i></a>
           </li>
           <% } else { %>
           <li class="nav-item">

@@ -24,7 +24,7 @@
         <!-- prettier-ignore -->
         <% if(currentUser && campground.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
         <a
-          class="btn btn-warning"
+          class="btn btn-outline-warning"
           href="/campgrounds/<%= campground._id %>/edit"
           >Edit</a
         >
@@ -33,7 +33,7 @@
           method="POST"
           class="delete-form"
         >
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-outline-danger">Delete</button>
         </form>
         <% } %>
       </div>
@@ -42,7 +42,7 @@
       <div class="card-body">
         <div class="text-right">
           <a
-            class="btn btn-success"
+            class="btn btn-outline-success"
             href="/campgrounds/<%= campground._id %>/comments/new"
             >Add New Comment</a
           >
@@ -64,7 +64,7 @@
                   <div class="float-right">
                     <a
                       href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit"
-                      class="btn btn-sm btn-warning"
+                      class="btn btn-sm btn-outline-warning"
                       >EDIT</a
                     >
                     <form
@@ -72,7 +72,9 @@
                       action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE"
                       method="POST"
                     >
-                      <button class="btn btn-sm btn-danger">DELETE</button>
+                      <button class="btn btn-sm btn-outline-danger">
+                        DELETE
+                      </button>
                     </form>
                   </div>
                   <% } %>

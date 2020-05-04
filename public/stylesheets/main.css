@@ -12,10 +12,10 @@
   padding: 10px;
   font-size: 16px;
 }
-
+/* 
 .form-signin h1 {
   color: #eeeeee;
-}
+} */
 
 .form-signin .form-control:focus {
   z-index: 2;
@@ -31,6 +31,10 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+/* .form-signin p {
+  color: #eeeeee;
+} */
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -51,7 +55,7 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
   font-family: Raleway;
-  background-color: #222831;
+  background-color: #ffffff;
 }
 
 .nav-link,
@@ -60,8 +64,11 @@ body {
 }
 
 #campgroundSearch {
-  color: #eeeeee;
-  background-color: #191e24;
+  background-color: #f0f0f0;
+}
+
+.text-center {
+  font-family: Raleway;
 }
 
 .footer {
@@ -70,35 +77,45 @@ body {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 60px;
-  background-color: #191e24;
+  background-color: #222325;
 }
-
+/* 
 .card-body p,
 a,
 h5 {
   color: #eeeeee;
-}
+} */
 
 #addCamp {
   font-weight: 400;
 }
 
-.footer p,
+/* .footer p,
 a {
   color: #eeeeee;
-}
+} */
 
 .card {
-  background-color: #393e46;
+  background-color: #f0f0f0;
 }
 
 .card a {
   font-weight: 400;
 }
 
-.card-title {
+/* .card-title {
   color: #eeeeee;
+} */
+
+.card-img-index {
+  width: 100%;
+  height: 12vw;
+  object-fit: cover;
 }
+
+/* .card-text {
+  font-size: 1.2em;
+} */
 
 .container .text-muted {
   margin: 20px 0;
@@ -124,17 +141,22 @@ a {
 }
 
 .jumbotron {
-  background-color: #393e46;
+  background-color: #f0f0f0;
 }
-.jumbotron p,
-h1 {
-  color: #eeeeee;
+
+.jumbotron h1 {
+  font-size: 4em;
 }
+
+.jumbotron p {
+  font-size: 1.5em;
+}
+
 /* Campground show page delete button */
 .delete-form {
   display: inline-block;
 }
 
 .bg-custom {
-  background-color: #191e24;
+  background-color: #222325;
 }

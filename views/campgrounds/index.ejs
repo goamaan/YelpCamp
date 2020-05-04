@@ -2,15 +2,15 @@
 
 <header class="jumbotron">
   <div class="container">
-      <h1><span class="glyphicon glyphicon-tent"></span> Welcome To YelpCamp!</h1>
-      <p>View our hand-picked campgrounds from all over the world</p>
-      <p>
-         <a id="addCamp"class="btn btn-primary btn-lg" href="/campgrounds/new">Add New Campground</a>
+      <h1 class="text-center">Welcome To YelpCamp! <i class="fas fa-map-signs"></i></i></h1>
+      <p class="text-center">View our hand-picked campgrounds from all over the world</p>
+      <p class="text-center">
+         <a id="addCamp"class="btn btn-outline-primary btn-lg" href="/campgrounds/new">Add New Campground</a>
       </p>
        <p>
-       <form action="/campgrounds" method="GET" class="form-inline" id="campground-search">
+       <form action="/campgrounds" method="GET" class="form-inline justify-content-center" id="campground-search">
          <div class="form-group">
-           <input id="campgroundSearch"type="text" name="search" placeholder="Campground search..." class="form-control">
+           <input id="campgroundSearch" type="text" name="search" placeholder="Campground search..." class="form-control text-center">
          </div>
        </form>
       </p>
@@ -20,11 +20,11 @@
 <div class="row text-center" id="campground-grid">
  <% campgrounds.forEach(function(campground){ %>
      <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-         <div class="card">
-           <img class="card-img-top" src="<%= campground.image %>" alt="<%= campground.name %>">
+         <div class="card h-100">
+           <img class="card-img-top card-img-index" src="<%= campground.image %>" alt="<%= campground.name %>">
            <div class="card-body">
              <h5 class="card-title"><%= campground.name %></h5>
-             <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
+             <a href="/campgrounds/<%= campground._id %>" class="btn btn-outline-info">More Info</a>
            </div>
          </div>
      </div>
