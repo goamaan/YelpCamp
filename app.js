@@ -16,6 +16,8 @@ const commentRoutes = require("./routes/comments"),
   campgroundRoutes = require("./routes/campgrounds"),
   indexRoutes = require("./routes/index");
 
+const port = process.env.PORT || 3000;
+
 mongoose.connect(process.env.DATABASEURL || "mongodb://localhost/yelp_camp", {
   useUnifiedTopology: true,
   useNewUrlParser: true,
@@ -56,4 +58,4 @@ app.use(indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 
-app.listen(3000, () => console.log("Listening on port 3000"));
+app.listen(port, () => console.log("Server started!"));
