@@ -63,8 +63,10 @@ body {
   font-weight: 400;
 }
 
-#campgroundSearch {
-  background-color: #f0f0f0;
+#campgroundSearch,
+#campgroundSearch::placeholder {
+  /* background-color: #f0f0f0; */
+  color: #fff;
 }
 
 .text-center {
@@ -141,15 +143,22 @@ a {
 }
 
 .jumbotron {
+  /* background-image: url(https://images.pexels.com/photos/1687845/pexels-photo-1687845.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260); */
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("https://images.pexels.com/photos/1687845/pexels-photo-1687845.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+  background-position: center;
+  background-size: cover;
   background-color: #f0f0f0;
 }
 
 .jumbotron h1 {
   font-size: 4em;
+  color: #f0f0f0;
 }
 
 .jumbotron p {
   font-size: 1.5em;
+  color: #f0f0f0;
 }
 
 /* Campground show page delete button */
